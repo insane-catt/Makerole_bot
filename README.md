@@ -7,7 +7,7 @@
 
 ## 使い方
 1. ロールを作り、自分に付与する場合<br>
-https://github.com/insane-catt/Makerole_bot/assets/129239662/260906b8-d9b7-4b43-b05a-324ae88854ad
+<div><video controls src="<!---https://github.com/insane-catt/Makerole_bot/assets/129239662/d7c848f4-3f3c-4130-9286-c2cbe9268f14--->" muted="false"></video></div>
 1. ロールを作るのみ、自分にはそのロールを付与しない場合<br>
 giveのところをいいえにするだけ
 

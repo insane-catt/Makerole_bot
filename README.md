@@ -7,7 +7,7 @@
 
 ## 使い方
 1. ロールを作り、自分に付与する場合<br>
-<div><video controls src="<!---https://github.com/insane-catt/Makerole_bot/assets/129239662/d7c848f4-3f3c-4130-9286-c2cbe9268f14--->" muted="false"></video></div>
+「/makerole」コマンドを使用し、rolenameの値に作成したいロール名を入れる。giveをはいにすると自分にもそのロールを付与する。
 1. ロールを作るのみ、自分にはそのロールを付与しない場合<br>
 giveのところをいいえにするだけ
 

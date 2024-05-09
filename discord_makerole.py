@@ -1,4 +1,4 @@
-# version 1.1.0
+# version 1.1.1
 
 # 最初の設定
 import config
@@ -11,6 +11,7 @@ TOKEN = config.TOKEN
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.guilds = True
 
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
@@ -74,7 +75,7 @@ class ColorView(View):
         self.add_item(ColorButton("B9", 151, 156, 159, role))
         self.add_item(ColorButton("B10", 84, 110, 122, role))
 
-# ロールの色を変更
+# changecolorコマンド
 @tree.command(name="changecolor", description="ロールの色を変更します")
 @app_commands.describe(rolename="色を変更するロールの名前")
 async def changecolor(interaction: discord.Interaction, rolename: str):
@@ -97,14 +98,7 @@ async def changecolor(interaction: discord.Interaction, rolename: str):
             )
         await interaction.response.send_message(embed=embed)
 
-# 以下はテスト用のコマンド
-'''
-@tree.command(name="hello", description="Hello, world!")
-async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message(f'Hello, {interaction.user.mention}!')
-'''
-
-# 以下スクリプト
+# makeroleコマンド
 @tree.command(name="makerole", description="ロールを作成します。")
 @app_commands.describe(rolename='ロール名', give='そのロールを付与する')
 @app_commands.choices(
@@ -141,6 +135,18 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: str):
                 )
             await interaction.response.send_message(embed=embed)
 
+@tree.command(name="serverusage", description="このbotがいくつのサーバーに入っているか確認できる")
+async def hello(interaction: discord.Interaction):
+    await interaction.response.send_message(f'このbotは現在 **{len(client.guilds)}つ** のサーバーで使われています。応援してね！')
+
+# 以下はテスト用のコマンド
+'''
+@tree.command(name="hello", description="Hello, world!")
+async def hello(interaction: discord.Interaction):
+    await interaction.response.send_message(f'Hello, {interaction.user.mention}!')
+'''
+
+# ログイン
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game(name="ロールを作ります"))

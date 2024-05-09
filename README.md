@@ -3,7 +3,7 @@
  ロールを作成したり、ロールの色を変更することが誰でもできるようになるbotですので、悪意を持ってロールをめちゃくちゃにする人のいない、身内のサーバーでの使用を想定しています。
 
 ## 導入
-**[招待リンク](https://discord.com/oauth2/authorize?client_id=1230900199698726975)** <br>
+**<a href="https://discord.com/oauth2/authorize?client_id=1230900199698726975" target="_blank" rel="noopener noreferrer">招待リンク</a>** <br>
 ↑これをクリックして導入する
 
 ## 使い方

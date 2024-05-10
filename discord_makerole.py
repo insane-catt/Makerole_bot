@@ -1,4 +1,4 @@
-# version 1.1.1
+# version 1.1.2
 
 # 最初の設定
 import config
@@ -47,7 +47,12 @@ class ColorButton(Button):
                     )
                     await interaction.response.send_message(embed=embed)
             else:
-                await interaction.response.send_message(f"{self.role} というロールは存在しません。")
+                embed = discord.Embed(
+                    title="エラー",
+                    color=0xff0000,
+                    description=f"**{self.role}** というロールが存在しません。色選択をする直前に削除されたものと思われます。"
+                    )
+                await interaction.response.send_message(embed=embed)
             self.disabled = True
             self.view.stop()
 

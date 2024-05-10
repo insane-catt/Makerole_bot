@@ -29,6 +29,7 @@ https://twitter.com/insane_catt
 DMまでどうぞ
 
 ## バージョン履歴
+- v1.1.2 色選択の際のロール消滅時の動作改善
 - v1.1.1 /serverusageコマンドの実装、スクリプトの整理(笑)
 - v1.1.0 Embedの導入、/changecolorコマンドの追加
 - v1.0.0

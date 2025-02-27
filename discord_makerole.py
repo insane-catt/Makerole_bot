@@ -1,13 +1,12 @@
 # version 1.1.2
 
 # 最初の設定
-import config
+from config import TOKEN, LANG
 import discord
 from discord import app_commands
 from discord.ui import Button, View
 import os
-
-TOKEN = config.TOKEN
+from PIL import ImageColor
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -15,6 +14,14 @@ intents.guilds = True
 
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+
+# 翻訳
+from languages import dictionary
+def tr(text):
+    if LANG == "jp":
+        return text
+    else:
+        return dictionary[LANG][text]
 
 # ボタンの処理
 class ColorButton(Button):
@@ -34,23 +41,23 @@ class ColorButton(Button):
                 try:
                     await role_obj.edit(color=discord.Color.from_rgb(self.r, self.g, self.b))
                     embed = discord.Embed(
-                        title="ロールの色を変更しました",
+                        title=tr("ロールの色を変更しました"),
                         color=0x00ff00,
-                        description=f"{self.role} の色を rgb({self.r}, {self.g}, {self.b}) に変更しました。"
+                        description=tr("変更されたロール：") + f"**{self.role}**\n" + f"rgb({self.r}, {self.g}, {self.b}) "
                     )
                     await interaction.response.send_message(embed=embed)
                 except discord.errors.Forbidden:
                     embed = discord.Embed(
-                        title="エラー",
+                        title=tr("エラー"),
                         color=0xff0000,
-                        description=f"ロール **{self.role}** の色を変更する権限がありません。このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。"
+                        description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{self.role}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
                     )
                     await interaction.response.send_message(embed=embed)
             else:
                 embed = discord.Embed(
-                    title="エラー",
+                    title=tr("エラー"),
                     color=0xff0000,
-                    description=f"**{self.role}** というロールが存在しません。色選択をする直前に削除されたものと思われます。"
+                    description=tr("次のロールが存在しません: ") + f"**{self.role}**\n" + tr("色選択をする直前に削除されたものと思われます。")
                     )
                 await interaction.response.send_message(embed=embed)
             self.disabled = True
@@ -81,35 +88,110 @@ class ColorView(View):
         self.add_item(ColorButton("B10", 84, 110, 122, role))
 
 # changecolorコマンド
-@tree.command(name="changecolor", description="ロールの色を変更します")
-@app_commands.describe(rolename="色を変更するロールの名前")
+@tree.command(name="changecolor", description=tr("ロールの色を変更します"))
+@app_commands.describe(rolename=tr("色を変更するロールの名前"))
 async def changecolor(interaction: discord.Interaction, rolename: str):
     role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
     if role_obj:
         file_path = os.path.join(os.path.dirname(__file__), "discord_rolecolors_edit.png")
         file = discord.File(file_path, filename="discord_rolecolors_edit.png")
         embed = discord.Embed(
-            title="ロールの色を変更します",
+            title=tr("ロールの色を変更します"),
             color=0x00ff00,
-            description="以下から色を選択してください"
+            description=tr("以下から色を選択してください")
         )
         embed.set_image(url="attachment://discord_rolecolors_edit.png")
         await interaction.response.send_message(file=file, embed=embed, view=ColorView(rolename))
     else:
         embed = discord.Embed(
-            title="エラー",
+            title=tr("エラー"),
             color=0xff0000,
-            description=f"**{rolename}** というロールは存在しません。"
+            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
             )
         await interaction.response.send_message(embed=embed)
 
+# changergbコマンド
+@tree.command(name="changergb", description=tr("ロールの色をRGBで指定して変更します"))
+@app_commands.describe(
+    rolename=tr("色を変更するロールの名前"),
+    r=tr("赤の値 (0-255)"),
+    g=tr("緑の値 (0-255)"),
+    b=tr("青の値 (0-255)")
+)
+async def changergb(interaction: discord.Interaction, rolename: str, r: int, g: int, b: int):
+    role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
+    if role_obj:
+        try:
+            await role_obj.edit(color=discord.Color.from_rgb(r, g, b))
+            embed = discord.Embed(
+                title=tr("ロールの色を変更しました"),
+                color=0x00ff00,
+                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"rgb({r}, {g}, {b})"
+            )
+            await interaction.response.send_message(embed=embed)
+        except discord.errors.Forbidden:
+            embed = discord.Embed(
+                title=tr("エラー"),
+                color=0xff0000,
+                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{rolename}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
+            )
+            await interaction.response.send_message(embed=embed)
+    else:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
+        )
+        await interaction.response.send_message(embed=embed)
+
+# changehexcolorコマンド
+@tree.command(name="changehexcolor", description=tr("ロールの色を16進数カラーコードで指定して変更します"))
+@app_commands.describe(
+    rolename=tr("色を変更するロールの名前"),
+    hex_color=tr("16進数カラーコード (例: #ff5733)")
+)
+async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_color: str):
+    role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
+    if role_obj:
+        try:
+            # 16進数カラーコードをRGBに変換
+            rgb = ImageColor.getcolor(hex_color, "RGB")
+            await role_obj.edit(color=discord.Color.from_rgb(*rgb))
+            embed = discord.Embed(
+                title=tr("ロールの色を変更しました"),
+                color=0x00ff00,
+                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"{hex_color} (rgb{rgb})"
+            )
+            await interaction.response.send_message(embed=embed)
+        except discord.errors.Forbidden:
+            embed = discord.Embed(
+                title=tr("エラー"),
+                color=0xff0000,
+                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{rolename}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
+            )
+            await interaction.response.send_message(embed=embed)
+        except ValueError:
+            embed = discord.Embed(
+                title=tr("エラー"),
+                color=0xff0000,
+                description=tr("無効な16進数カラーコードです: ") + f"**{hex_color}**"
+            )
+            await interaction.response.send_message(embed=embed)
+    else:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
+        )
+        await interaction.response.send_message(embed=embed)
+
 # makeroleコマンド
-@tree.command(name="makerole", description="ロールを作成します。")
-@app_commands.describe(rolename='ロール名', give='そのロールを付与する')
+@tree.command(name="makerole", description=tr("ロールを作成します"))
+@app_commands.describe(rolename=tr("ロール名"), give=tr("そのロールを付与する"))
 @app_commands.choices(
     give=[
-        discord.app_commands.Choice(name="はい", value="True"),
-        discord.app_commands.Choice(name="いいえ", value="False")
+        discord.app_commands.Choice(name=tr("はい"), value="True"),
+        discord.app_commands.Choice(name=tr("いいえ"), value="False")
     ]
 )
 async def makerole(interaction: discord.Interaction, rolename: str, give: str):
@@ -117,9 +199,9 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: str):
     existing_role = discord.utils.get(guild.roles, name=rolename)
     if existing_role:
         embed = discord.Embed(
-            title="エラー",
+            title=tr("エラー"),
             color=0xff0000,
-            description=f'**{rolename}** というロールは既に存在するため、新しく作成できませんでした。'
+            description=tr("次のロールは既に存在します: ") + f"**{rolename}**"
             )
         await interaction.response.send_message(embed=embed)
     else:
@@ -127,22 +209,26 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: str):
         if give == 'True':
             await interaction.user.add_roles(new_role)
             embed = discord.Embed(
-                title="ロールを作成しました",
+                title=tr("ロールを作成しました"),
                 color=0x00ff00,
-                description=f"ロール **{rolename}** を作成し、{interaction.user.mention}に付与しました。"
+                description=tr("作成されたロール: ") + f"**{rolename}**\n" + tr("次のユーザーに付与しました: ") + f"{interaction.user.mention}"
                 )
             await interaction.response.send_message(embed=embed)
         else:
             embed = discord.Embed(
-                title="ロールを作成しました",
+                title=tr("ロールを作成しました"),
                 color=0x00ff00,
-                description=f"ロール **{rolename}** を作成しました。"
+                description=tr("作成されたロール: ") + f"**{rolename}**"
                 )
             await interaction.response.send_message(embed=embed)
 
-@tree.command(name="serverusage", description="このbotがいくつのサーバーに入っているか確認できる")
+# serverusageコマンド
+@tree.command(name="serverusage", description=tr("このbotがいくつのサーバーに入っているか確認できる"))
 async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message(f'このbotは現在 **{len(client.guilds)}つ** のサーバーで使われています。応援してね！')
+    embed = discord.Embed(
+        description=tr("このbotは現在") + f"{len(client.guilds)}" + tr("つのサーバーで使われています。応援してね！")
+    )
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # 以下はテスト用のコマンド
 '''
@@ -154,7 +240,7 @@ async def hello(interaction: discord.Interaction):
 # ログイン
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name="ロールを作ります"))
+    await client.change_presence(activity=discord.Game(name=tr("ロールを作ります")))
     await tree.sync()
     print("login complete")
 

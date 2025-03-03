@@ -187,14 +187,22 @@ async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_co
 
 # makeroleコマンド
 @tree.command(name="makerole", description=tr("ロールを作成します"))
-@app_commands.describe(rolename=tr("ロール名"), give=tr("そのロールを付与する"))
+@app_commands.describe(
+    rolename=tr("ロール名"),
+    give=tr("そのロールを付与する"),
+    mentionable=tr("ロールをメンション可能にする")
+)
 @app_commands.choices(
     give=[
-        discord.app_commands.Choice(name=tr("はい"), value="True"),
-        discord.app_commands.Choice(name=tr("いいえ"), value="False")
+        discord.app_commands.Choice(name=tr("はい"), value=1),
+        discord.app_commands.Choice(name=tr("いいえ"), value=0)
+    ],
+    mentionable=[
+        discord.app_commands.Choice(name=tr("はい"), value=1),
+        discord.app_commands.Choice(name=tr("いいえ"), value=0)
     ]
 )
-async def makerole(interaction: discord.Interaction, rolename: str, give: str):
+async def makerole(interaction: discord.Interaction, rolename: str, give: int, mentionable: int):
     guild = interaction.guild
     existing_role = discord.utils.get(guild.roles, name=rolename)
     if existing_role:
@@ -205,22 +213,27 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: str):
             )
         await interaction.response.send_message(embed=embed)
     else:
-        new_role = await guild.create_role(name=rolename)
-        if give == 'True':
+        bool(give)
+        bool(mentionable)
+        new_role = await guild.create_role(name=rolename, mentionable=mentionable)
+        def give_or_not(give):
+            if give:
+                return "\n" + tr("次のユーザーに付与しました: ") + f"{interaction.user.mention}"
+            else:
+                return "\n" + tr("このロールはこの時点ではどのユーザーにも付与していません。")
+        def mentionable_or_not(mentionable):
+            if mentionable:
+                return "\n" + tr("このロールはメンションできます。")
+            else:
+                return "\n" + tr("このロールはメンションできません。")
+        if give: 
             await interaction.user.add_roles(new_role)
-            embed = discord.Embed(
-                title=tr("ロールを作成しました"),
-                color=0x00ff00,
-                description=tr("作成されたロール: ") + f"**{rolename}**\n" + tr("次のユーザーに付与しました: ") + f"{interaction.user.mention}"
-                )
-            await interaction.response.send_message(embed=embed)
-        else:
-            embed = discord.Embed(
-                title=tr("ロールを作成しました"),
-                color=0x00ff00,
-                description=tr("作成されたロール: ") + f"**{rolename}**"
-                )
-            await interaction.response.send_message(embed=embed)
+        embed = discord.Embed(
+            title=tr("ロールを作成しました"),
+            color=0x00ff00,
+            description=tr("作成されたロール: ") + f"**{rolename}**" + give_or_not(give) + mentionable_or_not(mentionable)
+            )
+        await interaction.response.send_message(embed=embed)
 
 # serverusageコマンド
 @tree.command(name="serverusage", description=tr("このbotがいくつのサーバーに入っているか確認できる"))

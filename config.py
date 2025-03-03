@@ -1,5 +1,5 @@
 # 言語設定
-LANG = "en" # jp or en
+LANG = "jp" # jp or en
 
 # TOKENの読出しをするやつです
 

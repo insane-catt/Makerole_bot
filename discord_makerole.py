@@ -213,20 +213,18 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
             )
         await interaction.response.send_message(embed=embed)
     else:
-        bool(give)
-        bool(mentionable)
         new_role = await guild.create_role(name=rolename, mentionable=mentionable)
         def give_or_not(give):
-            if give:
+            if bool(give):
                 return "\n" + tr("次のユーザーに付与しました: ") + f"{interaction.user.mention}"
             else:
                 return "\n" + tr("このロールはこの時点ではどのユーザーにも付与していません。")
         def mentionable_or_not(mentionable):
-            if mentionable:
+            if bool(mentionable):
                 return "\n" + tr("このロールはメンションできます。")
             else:
                 return "\n" + tr("このロールはメンションできません。")
-        if give: 
+        if bool(give): 
             await interaction.user.add_roles(new_role)
         embed = discord.Embed(
             title=tr("ロールを作成しました"),

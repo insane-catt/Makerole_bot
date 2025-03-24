@@ -7,6 +7,8 @@ from discord import app_commands
 from discord.ui import Button, View
 import os
 from PIL import ImageColor
+from datetime import datetime
+import asyncio
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -22,6 +24,17 @@ def tr(text):
         return text
     else:
         return dictionary[LANG][text]
+    
+# bot名の確認
+async def daily_task():
+    await client.wait_until_ready()
+    while not client.is_closed():
+        print(f"このbotは{client.user.name}です")
+        now = datetime.now()
+        next_run = now.replace(day=now.day + 1, hour=0, minute=0, second=0, microsecond=0)
+        sleep_time = (next_run - now).total_seconds()
+        await asyncio.sleep(sleep_time)
+
 
 # ボタンの処理
 class ColorButton(Button):
@@ -254,5 +267,6 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name=tr("ロールを作ります")))
     await tree.sync()
     print("login complete")
+    client.loop.create_task(daily_task())
 
 client.run(TOKEN)

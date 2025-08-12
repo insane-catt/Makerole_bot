@@ -7,7 +7,7 @@ from discord import app_commands
 from discord.ui import Button, View
 import os
 from PIL import ImageColor
-from datetime import datetime
+from datetime import datetime, timedelta
 import asyncio
 
 intents = discord.Intents.default()
@@ -31,7 +31,8 @@ async def daily_task():
     while not client.is_closed():
         print(f"このbotは{client.user.name}です")
         now = datetime.now()
-        next_run = now.replace(day=now.day + 1, hour=0, minute=0, second=0, microsecond=0)
+        # 翌日の0時を計算
+        next_run = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         sleep_time = (next_run - now).total_seconds()
         await asyncio.sleep(sleep_time)
 

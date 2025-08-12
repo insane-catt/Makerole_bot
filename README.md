@@ -68,6 +68,7 @@ https://x.com/insane_catt
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.1 2025年8月12日 バグ修正など
 - v1.2 英語版の追加、/changergbコマンド、/changehexcolorコマンドの追加
 - v1.1.2 色選択の際のロール消滅時の動作改善
 - v1.1.1 /serverusageコマンドの実装、スクリプトの整理(笑)
@@ -75,6 +76,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.1 August 12, 2025 Bug fixes and improvements
 - v1.2 Added English version, added /changergb command, added /changehexcolor command
 - v1.1.2 Improved behavior when role disappears during color selection
 - v1.1.1 Implemented /serverusage command, cleaned up script (lol)

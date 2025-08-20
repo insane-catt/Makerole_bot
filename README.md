@@ -7,11 +7,11 @@ This is a Discord bot that allows you to create roles using slash commands.<br>
 It is designed for use in private servers where everyone can create and change role colors, assuming there are no malicious users who would mess up the roles.
 
 ## 導入
-**[招待リンク](https://discord.com/oauth2/authorize?client_id=1230900199698726975)** <br>
+**[日本語招待リンク](https://discord.com/oauth2/authorize?client_id=1230900199698726975)** <br>
 ↑これをクリックして導入できますが、今開いてるタブの中で開いてしまうので、新規タブで開くなどしてください。新規タブで開くようにGitHubでは設定できないらしいです！
 
 ## Installation
-**[Invite link](https://discord.com/oauth2/authorize?client_id=1344138056487145613)** <br>
+**[English Invite link](https://discord.com/oauth2/authorize?client_id=1344138056487145613)** <br>
 Clicking this link will open it in the current tab, so please open it in a new tab. It seems that GitHub cannot be set to open in a new tab!
 
 ## 使い方 How to use

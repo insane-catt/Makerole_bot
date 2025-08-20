@@ -57,7 +57,7 @@ class ColorButton(Button):
                     embed = discord.Embed(
                         title=tr("ロールの色を変更しました"),
                         color=0x00ff00,
-                        description=tr("変更されたロール：") + f"**{self.role}**\n" + f"rgb({self.r}, {self.g}, {self.b}) "
+                        description=tr("変更されたロール：") + f"**{self.role}**\n" + f"```rgb({self.r}, {self.g}, {self.b})``` "
                     )
                     await interaction.response.send_message(embed=embed)
                 except discord.errors.Forbidden:
@@ -140,7 +140,7 @@ async def changergb(interaction: discord.Interaction, rolename: str, r: int, g: 
             embed = discord.Embed(
                 title=tr("ロールの色を変更しました"),
                 color=0x00ff00,
-                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"rgb({r}, {g}, {b})"
+                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"```rgb({r}, {g}, {b})```"
             )
             await interaction.response.send_message(embed=embed)
         except discord.errors.Forbidden:
@@ -174,7 +174,7 @@ async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_co
             embed = discord.Embed(
                 title=tr("ロールの色を変更しました"),
                 color=0x00ff00,
-                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"{hex_color} (rgb{rgb})"
+                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"```{hex_color}```" + "\n" + f"```rgb{rgb}```"
             )
             await interaction.response.send_message(embed=embed)
         except discord.errors.Forbidden:

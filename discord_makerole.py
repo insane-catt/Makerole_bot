@@ -1,4 +1,4 @@
-# version 1.2.2
+# version 1.2.3
 
 # 最初の設定
 from config import TOKEN, LANG
@@ -21,9 +21,13 @@ tree = app_commands.CommandTree(client)
 from languages import dictionary
 def tr(text):
     if LANG == "jp":
+        # 日本語の場合はそのまま返す
         return text
     else:
-        return dictionary[LANG][text]
+        try:
+            return dictionary[LANG][text]
+        except KeyError:
+            return "Sorry, translation into English failed. Displaying message in Japanese: " + text
     
 # bot名の確認
 async def daily_task():

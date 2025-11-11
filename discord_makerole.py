@@ -209,7 +209,8 @@ async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_co
 @app_commands.describe(
     rolename=tr("ロール名"),
     give=tr("そのロールを付与する"),
-    mentionable=tr("ロールをメンション可能にする")
+    mentionable=tr("ロールをメンション可能にする"),
+    member=tr("付与するメンバー (省略するとあなた自身)")
 )
 @app_commands.choices(
     give=[
@@ -221,7 +222,7 @@ async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_co
         discord.app_commands.Choice(name=tr("いいえ"), value=0)
     ]
 )
-async def makerole(interaction: discord.Interaction, rolename: str, give: int, mentionable: int):
+async def makerole(interaction: discord.Interaction, rolename: str, give: int, mentionable: int, member: discord.Member = None):
     guild = interaction.guild
     existing_role = discord.utils.get(guild.roles, name=rolename)
     if existing_role:
@@ -232,23 +233,26 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
             )
         await interaction.response.send_message(embed=embed)
     else:
-        new_role = await guild.create_role(name=rolename, mentionable=mentionable)
-        def give_or_not(give):
-            if bool(give):
-                return "\n" + tr("次のユーザーに付与しました: ") + f"{interaction.user.mention}"
-            else:
-                return "\n" + tr("このロールはこの時点ではどのユーザーにも付与していません。")
-        def mentionable_or_not(mentionable):
-            if bool(mentionable):
-                return "\n" + tr("このロールはメンションできます。")
-            else:
-                return "\n" + tr("このロールはメンションできません。")
-        if bool(give): 
-            await interaction.user.add_roles(new_role)
+        new_role = await guild.create_role(name=rolename, mentionable=bool(mentionable))
+        # 付与処理
+        if bool(give):
+            target = member if member else interaction.user
+            try:
+                await target.add_roles(new_role)
+                give_text = "\n" + tr("次のユーザーに付与しました: ") + f"{target.mention}"
+            except discord.errors.Forbidden:
+                give_text = "\n" + tr("ロールの付与に失敗しました（権限がありません）。")
+        else:
+            give_text = "\n" + tr("このロールはこの時点ではどのユーザーにも付与していません。")
+        # mentionable 表示
+        if bool(mentionable):
+            mentionable_text = "\n" + tr("このロールはメンションできます。")
+        else:
+            mentionable_text = "\n" + tr("このロールはメンションできません。")
         embed = discord.Embed(
             title=tr("ロールを作成しました"),
             color=0x00ff00,
-            description=tr("作成されたロール: ") + f"**{rolename}**" + give_or_not(give) + mentionable_or_not(mentionable)
+            description=tr("作成されたロール: ") + f"**{rolename}**" + give_text + mentionable_text
             )
         await interaction.response.send_message(embed=embed)
 

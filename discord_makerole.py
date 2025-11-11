@@ -34,6 +34,7 @@ async def daily_task():
     await client.wait_until_ready()
     while not client.is_closed():
         print(f"このbotは{client.user.name}です")
+        await client.change_presence(activity=discord.Game(name=f"{len(client.guilds)}" + tr("つのサーバーで稼働中")))
         now = datetime.now()
         # 翌日の0時を計算
         next_run = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -251,14 +252,6 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
             )
         await interaction.response.send_message(embed=embed)
 
-# serverusageコマンド
-@tree.command(name="serverusage", description=tr("このbotがいくつのサーバーに入っているか確認できる"))
-async def hello(interaction: discord.Interaction):
-    embed = discord.Embed(
-        description=tr("このbotは現在") + f"{len(client.guilds)}" + tr("つのサーバーで使われています。応援してね！")
-    )
-    await interaction.response.send_message(embed=embed, ephemeral=True)
-
 # 以下はテスト用のコマンド
 '''
 @tree.command(name="hello", description="Hello, world!")
@@ -269,7 +262,6 @@ async def hello(interaction: discord.Interaction):
 # ログイン
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=tr("ロールを作ります")))
     await tree.sync()
     print("login complete")
     client.loop.create_task(daily_task())

@@ -31,8 +31,7 @@ dictionary = {
         "作成されたロール: " : "Created role: ",
         "次のユーザーに付与しました: " : "Granted to the following user: ",
         "このbotがいくつのサーバーに入っているか確認できる" : "You can check how many servers this bot is in",
-        "このbotは現在" : "This bot is currently in ",
-        "つのサーバーで使われています。応援してね！" : " servers. Cheer up!",
+        "つのサーバーで稼働中" : " servers are running this bot",
         "ロールを作ります" : "Create a role",
     }
 }

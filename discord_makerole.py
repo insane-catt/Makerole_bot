@@ -44,74 +44,76 @@ async def daily_task():
 
 # ボタンの処理
 class ColorButton(Button):
-    def __init__(self, label, r, g, b, role):
+    def __init__(self, label, r, g, b, role_id: int):
         super().__init__(label=label, style=discord.ButtonStyle.gray)
         self.r = r
         self.g = g
         self.b = b
-        self.role = role
+        self.role_id = role_id
         self.clicked = False
 
     async def callback(self, interaction: discord.Interaction):
         if not self.clicked:
             self.clicked = True
-            role_obj = discord.utils.get(interaction.guild.roles, name=self.role)
+            role_obj = interaction.guild.get_role(self.role_id)
             if role_obj:
                 try:
                     await role_obj.edit(color=discord.Color.from_rgb(self.r, self.g, self.b))
                     embed = discord.Embed(
                         title=tr("ロールの色を変更しました"),
                         color=0x00ff00,
-                        description=tr("変更されたロール：") + f"**{self.role}**\n" + f"```rgb({self.r}, {self.g}, {self.b})``` "
+                        description=tr("変更されたロール：") + f"{role_obj.mention}\n" + f"```rgb({self.r}, {self.g}, {self.b})``` "
                     )
                     await interaction.response.send_message(embed=embed)
                 except discord.errors.Forbidden:
                     embed = discord.Embed(
                         title=tr("エラー"),
                         color=0xff0000,
-                        description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{self.role}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
+                        description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"{role_obj.mention}\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
                     )
                     await interaction.response.send_message(embed=embed)
             else:
                 embed = discord.Embed(
                     title=tr("エラー"),
                     color=0xff0000,
-                    description=tr("次のロールが存在しません: ") + f"**{self.role}**\n" + tr("色選択をする直前に削除されたものと思われます。")
+                    description=tr("次のロールが存在しません: ") + tr("色選択をする直前に削除されたものと思われます。")
                     )
                 await interaction.response.send_message(embed=embed)
             self.disabled = True
             self.view.stop()
 
 class ColorView(View):
-    def __init__(self, role):
+    def __init__(self, role: discord.Role):
         super().__init__()
-        self.add_item(ColorButton("A1", 26, 188, 156, role))
-        self.add_item(ColorButton("A2", 46, 204, 113, role))
-        self.add_item(ColorButton("A3", 52, 152, 219, role))
-        self.add_item(ColorButton("A4", 155, 89, 182, role))
-        self.add_item(ColorButton("A5", 233, 30, 99, role))
-        self.add_item(ColorButton("A6", 241, 196, 15, role))
-        self.add_item(ColorButton("A7", 230, 126, 34, role))
-        self.add_item(ColorButton("A8", 231, 76, 60, role))
-        self.add_item(ColorButton("A9", 149, 165, 166, role))
-        self.add_item(ColorButton("A10", 96, 125, 139, role))
-        self.add_item(ColorButton("B1", 17, 128, 106, role))
-        self.add_item(ColorButton("B2", 31, 139, 76, role))
-        self.add_item(ColorButton("B3", 32, 102, 148, role))
-        self.add_item(ColorButton("B4", 113, 54, 138, role))
-        self.add_item(ColorButton("B5", 173, 20, 87, role))
-        self.add_item(ColorButton("B6", 194, 124, 14, role))
-        self.add_item(ColorButton("B7", 168, 67, 0, role))
-        self.add_item(ColorButton("B8", 153, 45, 34, role))
-        self.add_item(ColorButton("B9", 151, 156, 159, role))
-        self.add_item(ColorButton("B10", 84, 110, 122, role))
+        role_id = role.id
+        self.add_item(ColorButton("A1", 26, 188, 156, role_id))
+        self.add_item(ColorButton("A2", 46, 204, 113, role_id))
+        self.add_item(ColorButton("A3", 52, 152, 219, role_id))
+        self.add_item(ColorButton("A4", 155, 89, 182, role_id))
+        self.add_item(ColorButton("A5", 233, 30, 99, role_id))
+        self.add_item(ColorButton("A6", 241, 196, 15, role_id))
+        self.add_item(ColorButton("A7", 230, 126, 34, role_id))
+        self.add_item(ColorButton("A8", 231, 76, 60, role_id))
+        self.add_item(ColorButton("A9", 149, 165, 166, role_id))
+        self.add_item(ColorButton("A10", 96, 125, 139, role_id))
+        self.add_item(ColorButton("B1", 17, 128, 106, role_id))
+        self.add_item(ColorButton("B2", 31, 139, 76, role_id))
+        self.add_item(ColorButton("B3", 32, 102, 148, role_id))
+        self.add_item(ColorButton("B4", 113, 54, 138, role_id))
+        self.add_item(ColorButton("B5", 173, 20, 87, role_id))
+        self.add_item(ColorButton("B6", 194, 124, 14, role_id))
+        self.add_item(ColorButton("B7", 168, 67, 0, role_id))
+        self.add_item(ColorButton("B8", 153, 45, 34, role_id))
+        self.add_item(ColorButton("B9", 151, 156, 159, role_id))
+        self.add_item(ColorButton("B10", 84, 110, 122, role_id))
 
 # changecolorコマンド
 @tree.command(name="changecolor", description=tr("ロールの色を変更します"))
-@app_commands.describe(rolename=tr("色を変更するロールの名前"))
-async def changecolor(interaction: discord.Interaction, rolename: str):
-    role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
-    if role_obj:
+@app_commands.describe(
+    role=tr("色を変更するロールを選択してください")
+)
+async def changecolor(interaction: discord.Interaction, role: discord.Role):
+    if role:
         file_path = os.path.join(os.path.dirname(__file__), "discord_rolecolors_edit.png")
         file = discord.File(file_path, filename="discord_rolecolors_edit.png")
         embed = discord.Embed(
@@ -120,73 +122,71 @@ async def changecolor(interaction: discord.Interaction, rolename: str):
             description=tr("以下から色を選択してください")
         )
         embed.set_image(url="attachment://discord_rolecolors_edit.png")
-        await interaction.response.send_message(file=file, embed=embed, view=ColorView(rolename))
+        await interaction.response.send_message(file=file, embed=embed, view=ColorView(role))
     else:
         embed = discord.Embed(
             title=tr("エラー"),
             color=0xff0000,
-            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
+            description=tr("ロールが存在しません。")
             )
         await interaction.response.send_message(embed=embed)
 
 # changergbコマンド
 @tree.command(name="changergb", description=tr("ロールの色をRGBで指定して変更します"))
 @app_commands.describe(
-    rolename=tr("色を変更するロールの名前"),
+    role=tr("色を変更するロールを選択してください"),
     r=tr("赤の値 (0-255)"),
     g=tr("緑の値 (0-255)"),
     b=tr("青の値 (0-255)")
 )
-async def changergb(interaction: discord.Interaction, rolename: str, r: int, g: int, b: int):
-    role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
-    if role_obj:
+async def changergb(interaction: discord.Interaction, role: discord.Role, r: int, g: int, b: int):
+    if role:
         try:
-            await role_obj.edit(color=discord.Color.from_rgb(r, g, b))
+            await role.edit(color=discord.Color.from_rgb(r, g, b))
             embed = discord.Embed(
                 title=tr("ロールの色を変更しました"),
                 color=0x00ff00,
-                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"```rgb({r}, {g}, {b})```"
+                description=tr("変更されたロール：") + f"{role.mention}\n" + f"```rgb({r}, {g}, {b})```"
             )
             await interaction.response.send_message(embed=embed)
         except discord.errors.Forbidden:
             embed = discord.Embed(
                 title=tr("エラー"),
                 color=0xff0000,
-                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{rolename}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
+                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"{role.mention}\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
             )
             await interaction.response.send_message(embed=embed)
     else:
         embed = discord.Embed(
             title=tr("エラー"),
             color=0xff0000,
-            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
+            description=tr("ロールが存在しません。")
         )
         await interaction.response.send_message(embed=embed)
 
 # changehexcolorコマンド
 @tree.command(name="changehexcolor", description=tr("ロールの色を16進数カラーコードで指定して変更します"))
 @app_commands.describe(
-    rolename=tr("色を変更するロールの名前"),
+    role=tr("色を変更するロールを選択してください"),
     hex_color=tr("16進数カラーコード (例: #ff5733)")
 )
-async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_color: str):
-    role_obj = discord.utils.get(interaction.guild.roles, name=rolename)
-    if role_obj:
+async def changehexcolor(interaction: discord.Interaction, role: discord.Role, hex_color: str):
+    if role:
         try:
             # 16進数カラーコードをRGBに変換
             rgb = ImageColor.getcolor(hex_color, "RGB")
-            await role_obj.edit(color=discord.Color.from_rgb(*rgb))
+            await role.edit(color=discord.Color.from_rgb(*rgb))
             embed = discord.Embed(
                 title=tr("ロールの色を変更しました"),
                 color=0x00ff00,
-                description=tr("変更されたロール：") + f"**{rolename}**\n" + f"```{hex_color}```" + "\n" + f"```rgb{rgb}```"
+                description=tr("変更されたロール：") + f"{role.mention}\n" + f"```{hex_color}```" + "\n" + f"```rgb{rgb}```"
             )
             await interaction.response.send_message(embed=embed)
         except discord.errors.Forbidden:
             embed = discord.Embed(
                 title=tr("エラー"),
                 color=0xff0000,
-                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"**{rolename}**\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
+                description=tr("このbotに次のロールの色を変更する権限がありません: ") + f"{role.mention}\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
             )
             await interaction.response.send_message(embed=embed)
         except ValueError:
@@ -200,7 +200,7 @@ async def changehexcolor(interaction: discord.Interaction, rolename: str, hex_co
         embed = discord.Embed(
             title=tr("エラー"),
             color=0xff0000,
-            description=tr("次のロールが存在しません: ") + f"**{rolename}**"
+            description=tr("ロールが存在しません。")
         )
         await interaction.response.send_message(embed=embed)
 

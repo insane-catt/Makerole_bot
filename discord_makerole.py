@@ -241,7 +241,7 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
                 await target.add_roles(new_role)
                 give_text = "\n" + tr("次のユーザーに付与しました: ") + f"{target.mention}"
             except discord.errors.Forbidden:
-                give_text = "\n" + tr("ロールの付与に失敗しました（権限がありません）。")
+                give_text = "\n" + tr("ロールの付与に失敗しました。") + "\n" + tr("このbotのロールを一番上に設定するなどして、権限の調整を行ってから、再度試してみてください。")
         else:
             give_text = "\n" + tr("このロールはこの時点ではどのユーザーにも付与していません。")
         # mentionable 表示

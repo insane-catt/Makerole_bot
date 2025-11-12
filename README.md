@@ -16,38 +16,29 @@ Clicking this link will open it in the current tab, so please open it in a new t
 
 ## 使い方 How to use
 ### ロールを作る
-1. ロールを作り、自分に付与する場合<br>
-`/makerole`コマンドを使用し、`rolename`の引数に作成したいロールの名前を入れる。`give`をはいにすると自分にもそのロールを付与する。
-1. ロールを作るのみ、自分にはそのロールを付与しない場合<br>
-`give`のところをいいえにするだけ
+`/makerole`コマンドを使用し、`rolename`の引数に作成したいロールの名前を入れる。`mentionable`の引数をはいにするとロールのメンションが可能になる。<br>
+`give`の引数をはいにすると`member`の引数で指定したメンバーにロールを付与する。
 
 ### Creating Roles
-1. To create a role and assign it to yourself<br>
-Use the `/makerole` command and enter the name of the role you want to create in the `rolename` argument. If you set `give` to "Give", the role will also be assigned to you.
-1. To create a role without assigning it to yourself<br>
-Just set `give` to "Do not give".
+Use the `/makerole` command, and put the name of the role you want to create in the `rolename` argument. If you set the `mentionable` argument to yes, the role will be mentionable.<br>
+If you set the `give` argument to yes, the role will be assigned to the member specified in the `member` argument.
 
 ### ロールの色を変える
-- `/changecolor`コマンドを使用し、`rolename`の引数に色を変えたいロールの名前を入れて実行する。次に任意の色に対応したボタンをクリックする。
-- `/changehexcolor`コマンドを使用し、`rolename`の引数に色を変えたいロールの名前を入れ、`hex_color`の引数に16進数カラーコードを入れて実行する。
-- `/changergb`コマンドを使用し、`rolename`の引数に色を変えたいロールの名前を入れ、`R`、`G`、`B`の引数にRGBのそれぞれの値を入れて実行する。
+- `/changecolor`コマンドを使用し、`role`の引数で色を変えたいロールを選択して実行する。次に任意の色に対応したボタンをクリックする。
+- `/changehexcolor`コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`hex_color`の引数に16進数カラーコードを入れて実行する。
+- `/changergb`コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`R`、`G`、`B`の引数にRGBのそれぞれの値を入れて実行する。
 <br><br>
 *注意：* Discordの仕様で、Discordのロール設定画面にて **色を変更したいロールよりも、このbotのロールが上に並んでいない限り** 「ロールの色を変更する権限がありません。」というエラーが発生する。<br>
 サーバーにこのbotを導入した際など（`/changecolor`コマンドを使用するより前）に、このbotのロールを設定画面の上方に並べ替えるようにすればこのエラーは発生しない。
 
 ### Changing Role Colors
-- Use the `/changecolor` command and enter the name of the role you want to change the color of in the `rolename` argument, then execute it. Next, click the button corresponding to the desired color.
-- Use the `/changehexcolor` command and enter the name of the role you want to change the color of in the `rolename` argument, and enter the hexadecimal color code in the `hex_color` argument, then execute it.
-- Use the `/changergb` command and enter the name of the role you want to change the color of in the `rolename` argument, and enter the RGB values in the `R`, `G`, and `B` arguments, then execute it.
+- Use the `/changecolor` command, select the role you want to change the color of with the `role` argument, and execute it. Then click the button corresponding to the desired color.
+- Use the `/changehexcolor` command, select the role you want to change the color of with the `role` argument, and execute it by entering the hexadecimal color code in the `hex_color` argument.
+- Use the `/changergb` command, select the role you want to change the color of with the `role` argument, and execute it by entering the respective R, G, and B values in the `R`, `G`, and `B` arguments.
 <br><br>
-*Note:* Due to Discord's specifications, an error stating "You do not have permission to change the color of this role" will occur unless the bot's role is positioned above the role you want to change in the Discord role settings screen.<br>
-To avoid this error, arrange the bot's role above the role you want to change in the settings screen before using the `/changecolor` command.
+*Note:* Due to Discord's specifications, you will get a "You do not have permission to change the color of this role." error unless the role of this bot is positioned above the role you want to change the color of in the Discord role settings.
+This error can be avoided by moving this bot's role to a higher position in the settings screen when first adding the bot to your server (before using the `/changecolor` command).
 
-### `/serverusage`コマンドってなに？いる？
-このbotがいくつのサーバーに入っているか作者が知りたいので付け足したコマンドです。
-
-### What is the `/serverusage` command? Is it necessary?
-This command was added so that the author can know how many servers this bot is in.
 
 ## 故障かな？と思ったら
 このbotは私の家にあるRaspberry Pi 4の上にホストしています。うちのブレーカーが落ちたりすると当然botも使えなくなります。そしたらなるべく早く対処しようとは思っていますので、少し待っててください。また、たまにプログラムの更新・入れ替えなどでbotを止めることもあります。これもそんなに長く止めるわけじゃないので、少し待っててください。あんまりにも長かったら、以下の連絡先にでも凸してください。完全に挙動がおかしい！このページをちゃんと読み込んでも全然ダメ！という時も、以下の連絡先に凸してください。
@@ -68,6 +59,7 @@ https://x.com/insane_catt
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.4 コマンドをより使いやすくした
 - v1.2.3 翻訳動作の改善
 - v1.2.2 細かな改善
 - v1.2.1 2025年8月12日 バグ修正など
@@ -78,6 +70,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.4 Made the command easier to use.
 - v1.2.3 Improved translation behavior
 - v1.2.2 Minor improvements
 - v1.2.1 August 12, 2025 Bug fixes and improvements

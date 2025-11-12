@@ -204,6 +204,70 @@ async def changehexcolor(interaction: discord.Interaction, role: discord.Role, h
         )
         await interaction.response.send_message(embed=embed)
 
+# grantroleコマンド
+@tree.command(name="grantrole", description=tr("指定したロールを指定したメンバーに付与します"))
+@app_commands.describe(
+    role=tr("付与するロール"),
+    member=tr("付与するメンバー (省略するとあなた自身)")
+)
+async def grantrole(interaction: discord.Interaction, role: discord.Role, member: discord.Member = None):
+    guild = interaction.guild
+    if not guild:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("サーバー内でのみ使用できるコマンドです。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    target = member if member else interaction.user
+
+    # 外部サービス管理ロールは付与できない
+    if role.managed:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このロールは外部サービスによって管理されているため付与できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 対象が既にロールを持っているか
+    if role in target.roles:
+        embed = discord.Embed(title=tr("情報"), color=0xffa500, description=tr("このメンバーは既にそのロールを持っています。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # Bot がそのロールを操作できるか（位置チェック）
+    bot_member = guild.me
+    if bot_member and bot_member.top_role.position <= role.position:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("このbotはそのロールを付与する権限がありません。サーバー内のロールの順位を確認してください。")
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 付与処理（実行者の権限は問わない）
+    try:
+        await target.add_roles(role, reason=f"Granted by {interaction.user} via /grantrole")
+        embed = discord.Embed(
+            title=tr("ロールを付与しました"),
+            color=0x00ff00,
+            description=tr("付与されたロール: ") + f"{role.mention}\n" + tr("次のユーザーに付与しました: ") + f"{target.mention}"
+        )
+        await interaction.response.send_message(embed=embed)
+    except discord.errors.Forbidden:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("このbotはそのロールを付与する権限がありません。サーバー内のロールの順位を確認してください。")
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+    except Exception as e:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("ロール付与中にエラーが発生しました: ") + str(e)
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+
 # makeroleコマンド
 @tree.command(name="makerole", description=tr("ロールを作成します"))
 @app_commands.describe(

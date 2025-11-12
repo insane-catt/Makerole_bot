@@ -266,7 +266,56 @@ async def grantrole(interaction: discord.Interaction, role: discord.Role, member
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
+# removeroleコマンド
+@tree.command(name="removerole", description=tr("指定したメンバーから指定したロールを除去します"))
+@app_commands.describe(
+    role=tr("除去するロール"),
+    member=tr("対象メンバー (省略するとあなた自身)")
+)
+async def removerole(interaction: discord.Interaction, role: discord.Role, member: discord.Member = None):
+    guild = interaction.guild
+    if not guild:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("サーバー内でのみ使用できるコマンドです。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
 
+    target = member if member else interaction.user
+
+    # 外部サービス管理ロールは除去できない
+    if role.managed:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このロールは外部サービスによって管理されているため除去できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 対象がそのロールを持っているか
+    if role not in target.roles:
+        embed = discord.Embed(title=tr("情報"), color=0xffa500, description=tr("このメンバーはそのロールを持っていません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 除去処理（実行者の権限は問わない）
+    try:
+        await target.remove_roles(role, reason=f"Removed by {interaction.user} via /removerole")
+        embed = discord.Embed(
+            title=tr("ロールを除去しました"),
+            color=0x00ff00,
+            description=tr("除去されたロール: ") + f"{role.mention}\n" + tr("対象ユーザー: ") + f"{target.mention}"
+        )
+        await interaction.response.send_message(embed=embed)
+    except discord.errors.Forbidden:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("このbotはそのロールを除去する権限がありません。サーバー内のロールの順位を確認してください。")
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+    except Exception as e:
+        embed = discord.Embed(
+            title=tr("エラー"),
+            color=0xff0000,
+            description=tr("ロール除去中にエラーが発生しました: ") + str(e)
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # makeroleコマンド
 @tree.command(name="makerole", description=tr("ロールを作成します"))

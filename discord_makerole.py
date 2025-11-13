@@ -369,6 +369,112 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
             )
         await interaction.response.send_message(embed=embed)
 
+# deleterolefromguildコマンド
+class ConfirmDeleteView(View):
+    def __init__(self, role: discord.Role, author_id: int):
+        super().__init__(timeout=60)
+        self.role = role
+        self.author_id = author_id
+
+    @discord.ui.button(label=tr("削除"), style=discord.ButtonStyle.danger)
+    async def confirm(self, interaction: discord.Interaction, button: Button):
+        if interaction.user.id != self.author_id:
+            await interaction.response.send_message(tr("この操作は実行者のみ行えます。"))
+            return
+
+        for item in self.children:
+            item.disabled = True
+        await interaction.response.edit_message(view=self)
+
+        try:
+            await self.role.delete(reason=f"Deleted by {interaction.user} via /deleterolefromguild")
+            embed = discord.Embed(
+                title=tr("ロールを削除しました"),
+                color=0x00ff00,
+                description=tr("削除されたロール: ") + f"**{self.role.name}**"
+            )
+            await interaction.followup.send(embed=embed)
+        except discord.errors.Forbidden:
+            embed = discord.Embed(
+                title=tr("エラー"),
+                color=0xff0000,
+                description=tr("このbotにそのロールを削除する権限がありません。サーバー内のロールの順位を確認してください。")
+            )
+            await interaction.followup.send(embed=embed)
+        except Exception as e:
+            embed = discord.Embed(
+                title=tr("エラー"),
+                color=0xff0000,
+                description=tr("ロール削除中にエラーが発生しました: ") + str(e)
+            )
+            await interaction.followup.send(embed=embed)
+        finally:
+            self.stop()
+
+    @discord.ui.button(label=tr("キャンセル"), style=discord.ButtonStyle.secondary)
+    async def cancel(self, interaction: discord.Interaction, button: Button):
+        if interaction.user.id != self.author_id:
+            await interaction.response.send_message(tr("この操作は実行者のみ行えます。"))
+            return
+        for item in self.children:
+            item.disabled = True
+        await interaction.response.edit_message(view=self)
+        await interaction.followup.send(tr("ロールの削除をキャンセルしました。"))
+        self.stop()
+
+@tree.command(name="deleterolefromguild", description=tr("指定したロールをサーバーから削除します"))
+@app_commands.describe(
+    role=tr("削除するロールを選択してください")
+)
+async def deleterolefromguild(interaction: discord.Interaction, role: discord.Role):
+    guild = interaction.guild
+    if not guild:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("サーバー内でのみ使用できるコマンドです。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # 実行者の権限チェックは行わない（実行者に manage_roles または administrator がなくても実行可能）
+
+    # 存在チェック
+    if role is None:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("ロールが見つかりません。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # @everyone 保護
+    if role == guild.default_role:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("@everyone ロールは削除できません。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # 外部サービス管理ロールは削除できない
+    if role.managed:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このロールは外部サービスによって管理されているため削除できません。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # Bot がそのロールを操作できるか（位置チェック）
+    bot_member = guild.me
+    if bot_member and bot_member.top_role.position <= role.position:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotはそのロールを削除する権限がありません。サーバー内のロールの順位を確認してください。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # Bot が manage_roles 権限を持っているか確認
+    if bot_member and not bot_member.guild_permissions.manage_roles:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotにロールを管理する権限(manage_roles)がありません。botの権限を確認してください。"))
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # 確認メッセージ（実行者以外はボタン操作不可）
+    embed = discord.Embed(
+        title=tr("ロールを削除します"),
+        color=0xffa500,
+        description=tr("本当に次のロールをサーバーから削除してもよろしいですか？\n削除されたロールは元に戻せません。\n") + f"**{role.name}**"
+    )
+    view = ConfirmDeleteView(role, interaction.user.id)
+    await interaction.response.send_message(embed=embed, view=view)
+
 # 以下はテスト用のコマンド
 '''
 @tree.command(name="hello", description="Hello, world!")

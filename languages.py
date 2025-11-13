@@ -11,6 +11,7 @@ dictionary = {
         "色を変更するロールを選択してください" : "Please select the role to change the color",
         "色を変更するロールの名前" : "Name of the role to change the color",
         "以下から色を選択してください" : "Please select a color from below",
+        "色選択をキャンセルしました。" : "Color selection has been canceled.",
         "ロールの色をRGBで指定して変更します" : "Change the color of the role by specifying it in RGB",
         "赤の値 (0-255)" : "Red value (0-255)",
         "緑の値 (0-255)" : "Green value (0-255)",

@@ -117,6 +117,29 @@ class ColorView(View):
         self.add_item(ColorButton("B9", 151, 156, 159, role_id))
         self.add_item(ColorButton("B10", 84, 110, 122, role_id))
 
+        # キャンセルボタンを最後に追加（B10 の下に表示されます）
+        cancel_button = Button(label=tr("キャンセル"), style=discord.ButtonStyle.secondary)
+        async def cancel_callback(interaction: discord.Interaction):
+            for item in self.children:
+                item.disabled = True
+            try:
+                await interaction.response.edit_message(view=self)
+            except Exception:
+                try:
+                    await interaction.message.edit(view=self)
+                except Exception:
+                    pass
+            try:
+                embed = discord.Embed(
+                    description=tr("色選択をキャンセルしました。")
+                )
+                await interaction.followup.send(embed=embed)
+            except Exception:
+                pass
+            self.stop()
+        cancel_button.callback = cancel_callback
+        self.add_item(cancel_button)
+
 # changecolorコマンド
 @tree.command(name="changecolor", description=tr("ロールの色を変更します"))
 @app_commands.describe(

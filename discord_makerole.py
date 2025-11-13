@@ -79,7 +79,17 @@ class ColorButton(Button):
                     description=tr("次のロールが存在しません: ") + tr("色選択をする直前に削除されたものと思われます。")
                     )
                 await interaction.response.send_message(embed=embed)
-            self.disabled = True
+
+            # ボタンを無効化してメッセージを更新（UI に反映）
+            for item in self.view.children:
+                item.disabled = True
+            try:
+                # 元のメッセージの view を編集して無効化を反映
+                if interaction.message:
+                    await interaction.message.edit(view=self.view)
+            except Exception:
+                pass
+
             self.view.stop()
 
 class ColorView(View):

@@ -74,6 +74,7 @@ dictionary = {
         "ロールを削除します" : "Delete a role",
         "本当に次のロールをサーバーから削除してもよろしいですか？\n削除されたロールは元に戻せません。\n" : "Are you sure you want to delete the following role from the server?\nDeleted roles cannot be restored.\n",
         "つのサーバーで稼働中" : " servers are running this bot",
-        "ロールを作ります" : "Create a role",
+        "このbotの使い方を表示します" : "Display how to use this bot",
+        "ロールを作るbot - ヘルプ" : "Makerole_bot - Help"
     }
 }

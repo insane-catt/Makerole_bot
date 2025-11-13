@@ -2,7 +2,7 @@
 スラッシュコマンドでロールを作るDiscord botです。<br>
 ロールを作成したり、ロールの色を変更することが誰でもできるようになるbotですので、悪意を持ってロールをめちゃくちゃにする人のいない、身内のサーバーでの使用を想定しています。
 
-# Role Creation Bot
+# Makerole_bot
 This is a Discord bot that allows you to create roles using slash commands.<br>
 It is designed for use in private servers where everyone can create and change role colors, assuming there are no malicious users who would mess up the roles.
 
@@ -13,6 +13,12 @@ It is designed for use in private servers where everyone can create and change r
 ## Installation
 **[English Invite link](https://discord.com/oauth2/authorize?client_id=1344138056487145613)** <br>
 Clicking this link will open it in the current tab, so please open it in a new tab. It seems that GitHub cannot be set to open in a new tab!
+
+## bot導入時の注意 Things to watch out for when setting up a bot
+Discordの仕様で、Discordのロール設定画面にて **変更を行いたいロールよりも、このbotのロールが上に並んでいない限り** 「権限がありません。」というエラーが発生する。<br>
+なので、サーバーにこのbotを導入した際に、このbotのロールを設定画面内で上方に並べ替えるようにしてください。
+Due to Discord's specifications, an "Insufficient permissions." error will occur on the Discord role settings screen unless the role of this bot is placed above the role you wish to modify.<br>
+Therefore, when introducing this bot to your server, please rearrange the bot's role to be higher up in the settings screen.
 
 ## 使い方 How to use
 ### ロールを作る
@@ -27,38 +33,35 @@ If you set the `give` argument to yes, the role will be assigned to the member s
 - `/changecolor`コマンドを使用し、`role`の引数で色を変えたいロールを選択して実行する。次に任意の色に対応したボタンをクリックする。
 - `/changehexcolor`コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`hex_color`の引数に16進数カラーコードを入れて実行する。
 - `/changergb`コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`R`、`G`、`B`の引数にRGBのそれぞれの値を入れて実行する。
-<br><br>
-*注意：* Discordの仕様で、Discordのロール設定画面にて **色を変更したいロールよりも、このbotのロールが上に並んでいない限り** 「ロールの色を変更する権限がありません。」というエラーが発生する。<br>
-サーバーにこのbotを導入した際など（`/changecolor`コマンドを使用するより前）に、このbotのロールを設定画面の上方に並べ替えるようにすればこのエラーは発生しない。
 
 ### Changing Role Colors
 - Use the `/changecolor` command, select the role you want to change the color of with the `role` argument, and execute it. Then click the button corresponding to the desired color.
 - Use the `/changehexcolor` command, select the role you want to change the color of with the `role` argument, and execute it by entering the hexadecimal color code in the `hex_color` argument.
 - Use the `/changergb` command, select the role you want to change the color of with the `role` argument, and execute it by entering the respective R, G, and B values in the `R`, `G`, and `B` arguments.
-<br><br>
-*Note:* Due to Discord's specifications, you will get a "You do not have permission to change the color of this role." error unless the role of this bot is positioned above the role you want to change the color of in the Discord role settings.
-This error can be avoided by moving this bot's role to a higher position in the settings screen when first adding the bot to your server (before using the `/changecolor` command).
 
+### ロールを付与・除去する
+- `/grantrole`コマンドを使用し、`role`の引数に付与したいロール、`member`引数に付与したいメンバーをいれ、実行してロールを付与する。
+- `/removerole`コマンドを使用し、`role`の引数に除去したいロール、`member`引数にロールを除去したいメンバーをいれ、実行してロールを除去する。
+
+### Granting and Removing Roles
+- Use the `/grantrole` command, specifying the role you want to grant in the `role` argument and the member you want to grant it to in the `member` argument, then execute it to grant the role.
+- Use the `/removerole` command, specifying the role you want to remove in the `role` argument and the member you want to remove the role from in the `member` argument, then execute it to remove the role.
 
 ## 故障かな？と思ったら
 このbotは私の家にあるRaspberry Pi 4の上にホストしています。うちのブレーカーが落ちたりすると当然botも使えなくなります。そしたらなるべく早く対処しようとは思っていますので、少し待っててください。また、たまにプログラムの更新・入れ替えなどでbotを止めることもあります。これもそんなに長く止めるわけじゃないので、少し待っててください。あんまりにも長かったら、以下の連絡先にでも凸してください。完全に挙動がおかしい！このページをちゃんと読み込んでも全然ダメ！という時も、以下の連絡先に凸してください。
 
-## Troubleshooting
+## Thinking it might be broken?
 This bot is hosted on a Raspberry Pi 4 at my home. If the circuit breaker trips, the bot will naturally go down. I will try to address it as soon as possible, so please wait a bit. Also, sometimes the bot will be stopped for program updates or replacements. This won't take too long, so please wait a bit. If it takes too long, please contact me at the following address. If the bot is behaving completely abnormally and reading this page doesn't help at all, please contact me at the following address.
 
-### 連絡先（機能追加などの要望も）
-Xとかいうだっせえ名前のSNS<br>
+### 連絡先・Contact（機能追加などの要望も）
+X<br>
 https://x.com/insane_catt
 
 DMまでどうぞ
-
-### Contact (for feature requests, etc.)
-A social network with a lame name called X<br>
-https://x.com/insane_catt
-
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.5 /grantroleコマンド、/removeroleコマンド、/deleterolefromguildコマンド、/helpコマンドを追加、/changecolorコマンドの改善
 - v1.2.4 コマンドをより使いやすくした
 - v1.2.3 翻訳動作の改善
 - v1.2.2 細かな改善
@@ -70,6 +73,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.5 Added /grantrole command, /removerole command, /deleterolefromguild command, /help command, and improved /changecolor command.
 - v1.2.4 Made the command easier to use.
 - v1.2.3 Improved translation behavior
 - v1.2.2 Minor improvements

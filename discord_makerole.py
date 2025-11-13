@@ -1,4 +1,4 @@
-# version 1.2.4
+# version 1.2.5
 
 # 最初の設定
 from config import TOKEN, LANG
@@ -507,6 +507,17 @@ async def deleterolefromguild(interaction: discord.Interaction, role: discord.Ro
     )
     view = ConfirmDeleteView(role, interaction.user.id)
     await interaction.response.send_message(embed=embed, view=view)
+
+# helpコマンド
+from help import text
+def help_text():
+    return text[LANG]
+
+@tree.command(name="help", description=tr("このbotの使い方を表示します"))
+async def help_command(interaction: discord.Interaction):
+    help_text_content = help_text()
+    embed = discord.Embed(title=tr("ロールを作るbot - ヘルプ"), description=help_text_content, color=0x00ff00)
+    await interaction.response.send_message(embed=embed)
 
 # 以下はテスト用のコマンド
 '''

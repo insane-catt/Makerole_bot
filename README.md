@@ -1,9 +1,11 @@
 # ロールを作るbot
 スラッシュコマンドでロールを作るDiscord botです。<br>
+ロールの色をRGBや16進数カラーコードで指定できるのが一つの強みです。もちろんDiscord標準の色を設定することも可能です。<br>
 ロールを作成したり、ロールの色を変更することが誰でもできるようになるbotですので、悪意を持ってロールをめちゃくちゃにする人のいない、身内のサーバーでの使用を想定しています。
 
 # Makerole_bot
 This is a Discord bot that allows you to create roles using slash commands.<br>
+One of its strengths is the ability to specify role colors using RGB or hexadecimal color codes. Of course, it is also possible to set standard Discord colors.<br>
 It is designed for use in private servers where everyone can create and change role colors, assuming there are no malicious users who would mess up the roles.
 
 ## 導入
@@ -61,6 +63,7 @@ DMまでどうぞ
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.6 READMEとhelpに文を追加
 - v1.2.5 /grantroleコマンド、/removeroleコマンド、/deleterolefromguildコマンド、/helpコマンドを追加、/changecolorコマンドの改善
 - v1.2.4 コマンドをより使いやすくした
 - v1.2.3 翻訳動作の改善
@@ -73,6 +76,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.6 Add sentences to README and help.
 - v1.2.5 Added /grantrole command, /removerole command, /deleterolefromguild command, /help command, and improved /changecolor command.
 - v1.2.4 Made the command easier to use.
 - v1.2.3 Improved translation behavior

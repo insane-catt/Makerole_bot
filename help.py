@@ -2,6 +2,7 @@ text = {
     "jp": 
     """# ロールを作るbot
 スラッシュコマンドでロールを作るDiscord botです。
+ロールの色をRGBや16進数カラーコードで指定できるのが一つの強みです。もちろんDiscord標準の色を設定することも可能です。
 ロールを作成したり、ロールの色を変更することが誰でもできるようになるbotですので、悪意を持ってロールをめちゃくちゃにする人のいない、身内のサーバーでの使用を想定しています。
 
 ## bot導入時の注意
@@ -29,6 +30,7 @@ https://x.com/insane_catt
     "en": 
     """# Makerole_bot
 This is a Discord bot that allows you to create roles using slash commands.
+One of its strengths is the ability to specify role colors using RGB or hexadecimal color codes. Of course, it is also possible to set standard Discord colors.
 It is designed for use in private servers where everyone can create and change role colors, assuming there are no malicious users who would mess up the roles.
 
 ## Things to watch out for when setting up a bot

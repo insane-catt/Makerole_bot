@@ -1,4 +1,4 @@
-# version 1.2.6
+# version 1.2.7
 
 # 最初の設定
 from config import TOKEN, LANG

@@ -63,6 +63,7 @@ DMまでどうぞ
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.7 helpにGitHubリポジトリのリンクを追加
 - v1.2.6 READMEとhelpに文を追加
 - v1.2.5 /grantroleコマンド、/removeroleコマンド、/deleterolefromguildコマンド、/helpコマンドを追加、/changecolorコマンドの改善
 - v1.2.4 コマンドをより使いやすくした
@@ -76,6 +77,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.7 Add the GitHub repository link to help.
 - v1.2.6 Add sentences to README and help.
 - v1.2.5 Added /grantrole command, /removerole command, /deleterolefromguild command, /help command, and improved /changecolor command.
 - v1.2.4 Made the command easier to use.

@@ -26,6 +26,9 @@ Discordの仕様で、Discordのロール設定画面にて **変更を行いた
 ### 連絡先（機能追加などの要望も）
 X
 https://x.com/insane_catt
+
+### GitHubリポジトリ
+https://github.com/insane-catt/Makerole_bot
 """,
     "en": 
     """# Makerole_bot
@@ -55,5 +58,8 @@ This bot is hosted on a Raspberry Pi 4 at my home. If the circuit breaker trips,
 ### Contact
 X
 https://x.com/insane_catt
+
+### GitHub Repository
+https://github.com/insane-catt/Makerole_bot
 """
 }

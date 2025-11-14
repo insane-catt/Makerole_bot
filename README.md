@@ -8,6 +8,8 @@ This is a Discord bot that allows you to create roles using slash commands.<br>
 One of its strengths is the ability to specify role colors using RGB or hexadecimal color codes. Of course, it is also possible to set standard Discord colors.<br>
 It is designed for use in private servers where everyone can create and change role colors, assuming there are no malicious users who would mess up the roles.
 
+<img width="751" height="974" alt="スクリーンショット 2025-11-14 105941" src="https://github.com/user-attachments/assets/801f74a9-be67-4457-8c6a-3f2f321ca1e6" />
+
 ## 導入
 **[日本語招待リンク](https://discord.com/oauth2/authorize?client_id=1230900199698726975)** <br>
 ↑これをクリックして導入できますが、今開いてるタブの中で開いてしまうので、新規タブで開くなどしてください。新規タブで開くようにGitHubでは設定できないらしいです！

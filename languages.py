@@ -75,6 +75,18 @@ dictionary = {
         "本当に次のロールをサーバーから削除してもよろしいですか？\n削除されたロールは元に戻せません。\n" : "Are you sure you want to delete the following role from the server?\nDeleted roles cannot be restored.\n",
         "つのサーバーで稼働中" : " servers are running this bot",
         "このbotの使い方を表示します" : "Display how to use this bot",
+        "任意のロールの名前を変更します" : "Change the name of any role",
+        "変更するロールを選択してください" : "Please select the role to change",
+        "新しいロール名" : "New role name",
+        "@everyone ロールの名前は変更できません。" : "The name of the @everyone role cannot be changed.",
+        "このロールは外部サービスによって管理されているため名前を変更できません。" : "This role cannot have its name changed because it is managed by an external service.",
+        "このbotはそのロールの名前を変更する権限がありません。サーバー内のロールの順位を確認してください。" : "This bot does not have permission to change the name of that role. Please check the role hierarchy in the server.",
+        "このbotにロールを管理する権限(manage_roles)がありません。botの権限を確認してください。" : "This bot does not have permission to manage roles (manage_roles). Please check the bot's permissions.",
+        "同じ名前のロールが既に存在します: " : "A role with the same name already exists: ",
+        "ロール名を変更しました" : "Changed the name of the role",
+        "変更前: " : "Before change: ",
+        "変更後: " : "After change: ",
+        "ロール名変更中にエラーが発生しました: " : "An error occurred while changing the role name: ",
         "ロールを作るbot - ヘルプ" : "Makerole_bot - Help"
     }
 }

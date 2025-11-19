@@ -1,4 +1,4 @@
-# version 1.2.7
+# version 1.2.8
 
 # 最初の設定
 from config import TOKEN, LANG
@@ -507,6 +507,72 @@ async def deleterolefromguild(interaction: discord.Interaction, role: discord.Ro
     )
     view = ConfirmDeleteView(role, interaction.user.id)
     await interaction.response.send_message(embed=embed, view=view)
+
+# changerolenameコマンド
+@tree.command(name="changerolename", description=tr("任意のロールの名前を変更します"))
+@app_commands.describe(
+    role=tr("変更するロールを選択してください"),
+    new_name=tr("新しいロール名")
+)
+async def changerolename(interaction: discord.Interaction, role: discord.Role, new_name: str):
+    guild = interaction.guild
+    if not guild:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("サーバー内でのみ使用できるコマンドです。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    if role is None:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("ロールが見つかりません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # @everyone は変更不可
+    if role == guild.default_role:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("@everyone ロールの名前は変更できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 外部サービス管理ロールは変更不可
+    if role.managed:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このロールは外部サービスによって管理されているため名前を変更できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    bot_member = guild.me
+    # Bot のロール順位チェック
+    if bot_member and bot_member.top_role.position <= role.position:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotはそのロールの名前を変更する権限がありません。サーバー内のロールの順位を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # Bot に manage_roles が必要
+    if bot_member and not bot_member.guild_permissions.manage_roles:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotにロールを管理する権限(manage_roles)がありません。botの権限を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 同名のロールが既に存在するか
+    existing = discord.utils.get(guild.roles, name=new_name)
+    if existing and existing.id != role.id:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("同じ名前のロールが既に存在します: ") + f"**{new_name}**")
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    old_name = role.name
+    try:
+        await role.edit(name=new_name, reason=f"Renamed by {interaction.user} via /changerolename")
+        embed = discord.Embed(
+            title=tr("ロール名を変更しました"),
+            color=0x00ff00,
+            description=tr("変更前: ") + f"**{old_name}**\n" + tr("変更後: ") + f"**{new_name}**"
+        )
+        await interaction.response.send_message(embed=embed)
+    except discord.errors.Forbidden:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotはそのロールの名前を変更する権限がありません。サーバー内のロールの順位を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+    except Exception as e:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("ロール名変更中にエラーが発生しました: ") + str(e))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # helpコマンド
 from help import text

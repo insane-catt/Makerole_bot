@@ -11,8 +11,7 @@ Discordの仕様で、Discordのロール設定画面にて **変更を行いた
 
 ## 使い方
 ### ロールを作る
-**`/makerole`**コマンドを使用し、`rolename`の引数に作成したいロールの名前を入れる。`mentionable`の引数をはいにするとロールのメンションが可能になる。<br>
-`give`の引数をはいにすると`member`の引数で指定したメンバーにロールを付与する。
+**`/makerole`**コマンドを使用し、`rolename`の引数に作成したいロールの名前を入れる。`mentionable`の引数をはいにするとロールのメンションが可能になる。`give`の引数をはいにすると`member`の引数で指定したメンバーにロールを付与する。
 ### ロールの色を変える
 - **`/changecolor`**コマンドを使用し、`role`の引数で色を変えたいロールを選択して実行する。次に任意の色に対応したボタンをクリックする。
 - **`/changehexcolor`**コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`hex_color`の引数に16進数カラーコードを入れて実行する。
@@ -47,8 +46,7 @@ Therefore, when introducing this bot to your server, please rearrange the bot's 
 
 ## How to use
 ### Creating Roles
-Use the **`/makerole`** command, and put the name of the role you want to create in the `rolename` argument. If you set the `mentionable` argument to yes, the role will be mentionable.<br>
-If you set the `give` argument to yes, the role will be assigned to the member specified in the `member` argument.
+Use the **`/makerole`** command, and put the name of the role you want to create in the `rolename` argument. If you set the `mentionable` argument to yes, the role will be mentionable. If you set the `give` argument to yes, the role will be assigned to the member specified in the `member` argument.
 ### Changing Role Colors
 - Use the **`/changecolor`** command, select the role you want to change the color of with the `role` argument, and execute it. Then click the button corresponding to the desired color.
 - Use the **`/changehexcolor`** command, select the role you want to change the color of with the `role` argument, and execute it by entering the hexadecimal color code in the `hex_color` argument.

@@ -28,32 +28,33 @@ Therefore, when introducing this bot to your server, please rearrange the bot's 
 ### ロールを作る
 **`/makerole`**コマンドを使用し、`rolename`の引数に作成したいロールの名前を入れる。`mentionable`の引数をはいにするとロールのメンションが可能になる。<br>
 `give`の引数をはいにすると`member`の引数で指定したメンバーにロールを付与する。
-
-### Creating Roles
-Use the **`/makerole`** command, and put the name of the role you want to create in the `rolename` argument. If you set the `mentionable` argument to yes, the role will be mentionable.<br>
-If you set the `give` argument to yes, the role will be assigned to the member specified in the `member` argument.
-
 ### ロールの色を変える
 - **`/changecolor`**コマンドを使用し、`role`の引数で色を変えたいロールを選択して実行する。次に任意の色に対応したボタンをクリックする。
 - **`/changehexcolor`**コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`hex_color`の引数に16進数カラーコードを入れて実行する。
 - **`/changergb`**コマンドを使用し、`role`の引数で色を変えたいロールを選択し、`R`、`G`、`B`の引数にRGBのそれぞれの値を入れて実行する。
 ### ロールの名前を変える
 - **`/changerolename`**コマンドを使用し、`role`の引数に名前を変更したいロール、`new_name`の引数に新しいロール名を入れて実行する。
+### ロールを付与・除去する
+- **`/grantrole`**コマンドを使用し、`role`の引数に付与したいロール、`member`引数に付与したいメンバーをいれ、実行してロールを付与する。
+- **`/removerole`**コマンドを使用し、`role`の引数に除去したいロール、`member`引数にロールを除去したいメンバーをいれ、実行してロールを除去する。
+### ロールの順位を変更する（botより下位のロールに限り有効）
+- **`/movetoprole`**コマンドを使用し、`role`の引数で指定されたロールを可能な限り上の順位に移動する。
 
+### Creating Roles
+Use the **`/makerole`** command, and put the name of the role you want to create in the `rolename` argument. If you set the `mentionable` argument to yes, the role will be mentionable.<br>
+If you set the `give` argument to yes, the role will be assigned to the member specified in the `member` argument.
 ### Changing Role Colors
 - Use the **`/changecolor`** command, select the role you want to change the color of with the `role` argument, and execute it. Then click the button corresponding to the desired color.
 - Use the **`/changehexcolor`** command, select the role you want to change the color of with the `role` argument, and execute it by entering the hexadecimal color code in the `hex_color` argument.
 - Use the **`/changergb`** command, select the role you want to change the color of with the `role` argument, and execute it by entering the respective R, G, and B values in the `R`, `G`, and `B` arguments.
-
-### ロールを付与・除去する
-- **`/grantrole`**コマンドを使用し、`role`の引数に付与したいロール、`member`引数に付与したいメンバーをいれ、実行してロールを付与する。
-- **`/removerole`**コマンドを使用し、`role`の引数に除去したいロール、`member`引数にロールを除去したいメンバーをいれ、実行してロールを除去する。
-
+### Changing Role Names
+- Use the **`/changerolename`** command, specifying the role whose name you want to change in the `role` argument and entering the new role name in the `new_name` argument, then execute it.
 ### Granting and Removing Roles
 - Use the **`/grantrole`** command, specifying the role you want to grant in the `role` argument and the member you want to grant it to in the `member` argument, then execute it to grant the role.
 - Use the **`/removerole`** command, specifying the role you want to remove in the `role` argument and the member you want to remove the role from in the `member` argument, then execute it to remove the role.
-### Changing Role Names
-- Use the **`/changerolename`** command, specifying the role whose name you want to change in the `role` argument and entering the new role name in the `new_name` argument, then execute it.
+### Reorder Roles (Only effective for roles lower than the bot)
+- Use the **`/movetoprole`** command and move the role specified by the `role` argument to the highest possible position.
+
 
 ## 故障かな？と思ったら
 このbotは私の家にあるRaspberry Pi 4の上にホストしています。うちのブレーカーが落ちたりすると当然botも使えなくなります。そしたらなるべく早く対処しようとは思っていますので、少し待っててください。また、たまにプログラムの更新・入れ替えなどでbotを止めることもあります。これもそんなに長く止めるわけじゃないので、少し待っててください。あんまりにも長かったら、以下の連絡先にでも凸してください。完全に挙動がおかしい！このページをちゃんと読み込んでも全然ダメ！という時も、以下の連絡先に凸してください。
@@ -69,6 +70,7 @@ DMまでどうぞ
 Feel free to DM me.
 
 ## バージョン履歴
+- v1.2.9 /movetoproleコマンドを追加
 - v1.2.8 /changerolenameコマンドを追加
 - v1.2.7 helpにGitHubリポジトリのリンクを追加
 - v1.2.6 READMEとhelpに文を追加
@@ -84,6 +86,7 @@ Feel free to DM me.
 - v1.0.0
 
 ## Version History
+- v1.2.9 Added /movetoprole command
 - v1.2.8 Added /changerolename command
 - v1.2.7 Add the GitHub repository link to help.
 - v1.2.6 Add sentences to README and help.

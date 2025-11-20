@@ -1,4 +1,4 @@
-# version 1.2.8
+# version 1.2.9
 
 # 最初の設定
 from config import TOKEN, LANG
@@ -401,6 +401,78 @@ async def makerole(interaction: discord.Interaction, rolename: str, give: int, m
             description=tr("作成されたロール: ") + f"**{rolename}**" + give_text + mentionable_text
             )
         await interaction.response.send_message(embed=embed)
+
+# movetoproleコマンド
+@tree.command(name="movetoprole", description=tr("選択したロールを可能な限り上の順位に移動します"))
+@app_commands.describe(
+    role=tr("移動するロールを選択してください")
+)
+async def movetoprole(interaction: discord.Interaction, role: discord.Role):
+    guild = interaction.guild
+    if not guild:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("サーバー内でのみ使用できるコマンドです。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    if role is None:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("ロールが見つかりません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # @everyone は移動不可
+    if role == guild.default_role:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("@everyone ロールは移動できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 外部サービス管理ロールは移動不可
+    if role.managed:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このロールは外部サービスによって管理されているため移動できません。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    bot_member = guild.me
+    if bot_member is None:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このサーバーでのbot情報が取得できませんでした。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # Bot に manage_roles が必要
+    if not bot_member.guild_permissions.manage_roles:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotにロールを管理する権限(manage_roles)がありません。botの権限を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # Bot の役職より上に移動できない
+    if bot_member.top_role.position <= role.position:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotはそのロールを上に移動する権限がありません。サーバー内のロールの順位を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+
+    # 目標位置は bot のトップロールの直下
+    target_position = bot_member.top_role.position - 1
+
+    old_position = role.position
+    try:
+        # role オブジェクトをキーにして位置を更新
+        await guild.edit_role_positions(positions={role: target_position}, reason=f"Moved by {interaction.user} via /movetoprole")
+        # 最新の役職情報を取得
+        new_role = guild.get_role(role.id)
+        new_position = new_role.position if new_role else target_position
+        embed = discord.Embed(
+            title=tr("ロールを上位に移動しました"),
+            color=0x00ff00,
+            description=tr("移動されたロール: ") + f"{new_role.mention if new_role else role.name}\n" +
+                        tr("移動前の順位: ") + f"{old_position}\n" +
+                        tr("移動後の順位: ") + f"{new_position}"
+        )
+        await interaction.response.send_message(embed=embed)
+    except discord.errors.Forbidden:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("このbotにロールの順位を変更する権限がありません。botのロール配置を確認してください。"))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+    except Exception as e:
+        embed = discord.Embed(title=tr("エラー"), color=0xff0000, description=tr("ロール移動中にエラーが発生しました: ") + str(e))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # deleterolefromguildコマンド
 class ConfirmDeleteView(View):
